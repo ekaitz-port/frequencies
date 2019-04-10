@@ -42,15 +42,15 @@ public class Home {
         sentences.add("Hola Hola me Hola que tal");
         sentences.add("Osea hellou que ase");
 
-        Stream<String[]> allSentencesDividedByWords = sentences.stream()
+        Stream<String[]> allSentencesDividedByWordsStream = sentences.stream()
                 .map(sentence -> sentence.split(" "));
 
-        List<String> dictionary = allSentencesDividedByWords
+        List<String> dictionary = allSentencesDividedByWordsStream
                 .flatMap(Arrays::stream)
                 .distinct()
                 .collect(Collectors.toList());
 
-        return allSentencesDividedByWords
+        return allSentencesDividedByWordsStream
                 .map(sentence -> buildListOfFrequencies(sentence, dictionary))
                 .collect(Collectors.toList());
     }
