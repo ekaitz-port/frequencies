@@ -45,21 +45,20 @@ public class Home {
         Stream<String[]> allSentencesDividedByWordsStream = sentences.stream()
                 .map(sentence -> sentence.split(" "));
 
-        List<String> dictionary = allSentencesDividedByWordsStream
+        Stream<String> dictionary = allSentencesDividedByWordsStream
                 .flatMap(Arrays::stream)
-                .distinct()
-                .collect(Collectors.toList());
+                .distinct();
 
         return allSentencesDividedByWordsStream
                 .map(sentence -> buildListOfFrequencies(sentence, dictionary))
                 .collect(Collectors.toList());
     }
 
-    private List<Long> buildListOfFrequencies(String[] words, List<String> dictionary) {
+    private List<Long> buildListOfFrequencies(String[] words, Stream<String> dictionary) {
         Map<String, Long> countedWords = Arrays.stream(words)
                 .collect(Collectors.groupingBy(word -> word, Collectors.counting()));
 
-        return dictionary.stream()
+        return dictionary
                 .map(entry -> countedWords.get(entry) == null ? new Long(0) : countedWords.get(entry))
                 .collect(Collectors.toList());
     }
