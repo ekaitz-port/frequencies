@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 public class Home {
@@ -41,24 +42,21 @@ public class Home {
         sentences.add("Hola Hola me Hola que tal");
         sentences.add("Osea hellou que ase");
 
-        List<List<String>> allSentencesDividedByWords = sentences.stream()
-                .map(sentence -> sentence.split(" "))
-                .map(Arrays::asList)
-                .collect(Collectors.toList());
+        Stream<String[]> allSentencesDividedByWords = sentences.stream()
+                .map(sentence -> sentence.split(" "));
 
         List<String> dictionary = allSentencesDividedByWords
-                .stream()
-                .flatMap(Collection::stream)
+                .flatMap(Arrays::stream)
                 .distinct()
                 .collect(Collectors.toList());
 
-        return allSentencesDividedByWords.stream()
+        return allSentencesDividedByWords
                 .map(sentence -> buildListOfFrequencies(sentence, dictionary))
                 .collect(Collectors.toList());
     }
 
-    private List<Long> buildListOfFrequencies(List<String> words, List<String> dictionary) {
-        Map<String, Long> countedWords = words.stream()
+    private List<Long> buildListOfFrequencies(String[] words, List<String> dictionary) {
+        Map<String, Long> countedWords = Arrays.stream(words)
                 .collect(Collectors.groupingBy(word -> word, Collectors.counting()));
 
         return dictionary.stream()
